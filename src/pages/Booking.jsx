@@ -150,7 +150,11 @@ function Booking({ user }) {
     setCouponMessage("");
     try {
       const originalAmount = calculateTotalAmount();
-      const response = await fetch(`http://localhost:8000/api/bookings/validate-coupon?code=${couponCode.trim().toUpperCase()}&amount=${originalAmount}`);
+      const response = await fetch(`http://localhost:8000/api/bookings/validate-coupon?code=${couponCode.trim().toUpperCase()}&amount=${originalAmount}`, {
+        headers: {
+          "Authorization": `Bearer ${user?.token}`
+        }
+      });
       const data = await response.json();
       if (response.ok) {
         setCouponApplied(true);

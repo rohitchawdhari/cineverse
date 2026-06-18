@@ -6,11 +6,11 @@ function Login({ onLogin, isAdmin }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -30,14 +30,20 @@ function Login({ onLogin, isAdmin }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          role: isAdmin ? "ADMIN" : "USER",
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         if (isAdmin && data.user.role !== "ADMIN") {
-          setMessage("Access Denied: You do not have administrator privileges.");
+          setMessage(
+            "Access Denied: You do not have administrator privileges.",
+          );
           setIsSuccess(false);
           setLoading(false);
           return;
@@ -49,7 +55,7 @@ function Login({ onLogin, isAdmin }) {
           name: data.user.name,
           email: data.user.email,
           role: data.user.role,
-          token: data.token
+          token: data.token,
         });
         navigate(data.user.role === "ADMIN" ? "/admin" : "/dashboard");
       } else {
@@ -88,10 +94,13 @@ function Login({ onLogin, isAdmin }) {
 
       if (response.ok) {
         setIsSuccess(true);
-        setMessage(data.message || "Registration successful! Please verify your email.");
-        // Clear fields
+        setMessage(
+          data.message || "Registration successful! You can now sign in.",
+        );
+        // Clear fields and switch to sign in
         setName("");
         setPassword("");
+        setActiveTab("signin");
       } else {
         setMessage(data.message || "Registration failed.");
         setIsSuccess(false);
@@ -116,19 +125,25 @@ function Login({ onLogin, isAdmin }) {
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:8000/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
         },
-        body: JSON.stringify({ email }),
-      });
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         setIsSuccess(true);
-        setMessage(data.message || "If registered, a password reset link has been sent to your email.");
+        setMessage(
+          data.message ||
+            "If registered, a password reset link has been sent to your email.",
+        );
       } else {
         setMessage(data.message || "Failed to submit request.");
         setIsSuccess(false);
@@ -151,17 +166,22 @@ function Login({ onLogin, isAdmin }) {
     <div className="login-page-container">
       <div className="background-glow-1"></div>
       <div className="background-glow-2"></div>
-      
+
       <div className="glass-panel login-card animate-fade-in">
         <div className="login-header">
           <span className="logo-icon">🎬</span>
           <h2>{isAdmin ? "Cineverse Admin Portal" : "Cineverse"}</h2>
           <p>
-            {isAdmin ? "Sign in to manage movies, theaters, and schedule shows" : (
+            {isAdmin ? (
+              "Sign in to manage movies, theaters, and schedule shows"
+            ) : (
               <>
-                {activeTab === "signin" && "Sign in to book tickets and explore movies"}
-                {activeTab === "signup" && "Create an account to unlock booking features"}
-                {activeTab === "forgot" && "Reset your password to recover your account"}
+                {activeTab === "signin" &&
+                  "Sign in to book tickets and explore movies"}
+                {activeTab === "signup" &&
+                  "Create an account to unlock booking features"}
+                {activeTab === "forgot" &&
+                  "Reset your password to recover your account"}
               </>
             )}
           </p>
@@ -169,13 +189,13 @@ function Login({ onLogin, isAdmin }) {
 
         {activeTab !== "forgot" && !isAdmin && (
           <div className="tabs-container">
-            <button 
+            <button
               className={`tab-btn ${activeTab === "signin" ? "active" : ""}`}
               onClick={() => switchTab("signin")}
             >
               Sign In
             </button>
-            <button 
+            <button
               className={`tab-btn ${activeTab === "signup" ? "active" : ""}`}
               onClick={() => switchTab("signup")}
             >
@@ -204,9 +224,9 @@ function Login({ onLogin, isAdmin }) {
               <div className="label-row">
                 <label htmlFor="password">Password</label>
                 {!isAdmin && (
-                  <button 
-                    type="button" 
-                    className="forgot-link" 
+                  <button
+                    type="button"
+                    className="forgot-link"
                     onClick={() => switchTab("forgot")}
                   >
                     Forgot Password?
@@ -226,12 +246,18 @@ function Login({ onLogin, isAdmin }) {
             </div>
 
             {message && (
-              <div className={`status-message ${isSuccess ? "success" : "error"}`}>
+              <div
+                className={`status-message ${isSuccess ? "success" : "error"}`}
+              >
                 {message}
               </div>
             )}
 
-            <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn-primary login-btn"
+              disabled={loading}
+            >
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
@@ -282,12 +308,18 @@ function Login({ onLogin, isAdmin }) {
             </div>
 
             {message && (
-              <div className={`status-message ${isSuccess ? "success" : "error"}`}>
+              <div
+                className={`status-message ${isSuccess ? "success" : "error"}`}
+              >
                 {message}
               </div>
             )}
 
-            <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn-primary login-btn"
+              disabled={loading}
+            >
               {loading ? "Registering..." : "Sign Up"}
             </button>
           </form>
@@ -310,17 +342,23 @@ function Login({ onLogin, isAdmin }) {
             </div>
 
             {message && (
-              <div className={`status-message ${isSuccess ? "success" : "error"}`}>
+              <div
+                className={`status-message ${isSuccess ? "success" : "error"}`}
+              >
                 {message}
               </div>
             )}
 
-            <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn-primary login-btn"
+              disabled={loading}
+            >
               {loading ? "Sending link..." : "Send Reset Link"}
             </button>
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn btn-secondary back-btn"
               onClick={() => switchTab("signin")}
             >

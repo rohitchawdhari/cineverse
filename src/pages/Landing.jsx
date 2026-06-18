@@ -192,19 +192,21 @@ function Landing({ user }) {
           <div className="showcase-grid">
             {nowShowing.map((movie) => (
               <div key={movie.id} className="glass-panel showcase-card">
-                <div className="showcase-poster-wrapper">
-                  {movie.poster ? (
-                    <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
-                  ) : (
-                    <div className="showcase-poster-fallback">🎬</div>
-                  )}
-                  <div className="showcase-badge">NOW SHOWING</div>
-                </div>
-                <div className="showcase-info">
-                  <div>
-                    <span className="showcase-genre">{movie.genre}</span>
-                    <h3>{movie.title}</h3>
+                <Link to="/movies" state={{ selectedMovieId: movie.id }} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="showcase-poster-wrapper">
+                    {movie.poster ? (
+                      <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
+                    ) : (
+                      <div className="showcase-poster-fallback">🎬</div>
+                    )}
+                    <div className="showcase-badge">NOW SHOWING</div>
                   </div>
+                  <div className="showcase-info" style={{ paddingBottom: 0 }}>
+                    <span className="showcase-genre">{movie.genre}</span>
+                    <h3 style={{ marginBottom: 0 }}>{movie.title}</h3>
+                  </div>
+                </Link>
+                <div className="showcase-info" style={{ paddingTop: 0 }}>
                   <div className="showcase-footer">
                     <span className="movie-rating">★ {getAverageRating(movie)}</span>
                     <Link to={user ? "/booking" : "/login"} state={{ movieTitle: movie.title }} className="showcase-btn">
@@ -232,19 +234,21 @@ function Landing({ user }) {
           <div className="showcase-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}>
             {recommended.map((movie) => (
               <div key={movie.id} className="glass-panel showcase-card" style={{ borderColor: "rgba(0, 242, 254, 0.15)" }}>
-                <div className="showcase-poster-wrapper">
-                  {movie.poster ? (
-                    <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
-                  ) : (
-                    <div className="showcase-poster-fallback">🎬</div>
-                  )}
-                  <div className="showcase-badge" style={{ background: "var(--secondary)" }}>HIGHLY RATED</div>
-                </div>
-                <div className="showcase-info">
-                  <div>
-                    <span className="showcase-genre" style={{ color: "var(--secondary)" }}>{movie.genre}</span>
-                    <h3>{movie.title}</h3>
+                <Link to="/movies" state={{ selectedMovieId: movie.id }} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="showcase-poster-wrapper">
+                    {movie.poster ? (
+                      <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
+                    ) : (
+                      <div className="showcase-poster-fallback">🎬</div>
+                    )}
+                    <div className="showcase-badge" style={{ background: "var(--secondary)" }}>HIGHLY RATED</div>
                   </div>
+                  <div className="showcase-info" style={{ paddingBottom: 0 }}>
+                    <span className="showcase-genre" style={{ color: "var(--secondary)" }}>{movie.genre}</span>
+                    <h3 style={{ marginBottom: 0 }}>{movie.title}</h3>
+                  </div>
+                </Link>
+                <div className="showcase-info" style={{ paddingTop: 0 }}>
                   <div className="showcase-footer">
                     <span className="movie-rating" style={{ color: "var(--secondary)" }}>★ {getAverageRating(movie)}</span>
                     <Link to={user ? "/booking" : "/login"} state={{ movieTitle: movie.title }} className="showcase-btn" style={{ background: "rgba(0, 242, 254, 0.1)", color: "var(--secondary)", border: "1px solid rgba(0, 242, 254, 0.2)" }}>
@@ -273,20 +277,22 @@ function Landing({ user }) {
           <div className="showcase-grid">
             {upcoming.map((movie) => (
               <div key={movie.id} className="glass-panel showcase-card upcoming">
-                <div className="showcase-poster-wrapper">
-                  {movie.poster ? (
-                    <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
-                  ) : (
-                    <div className="showcase-poster-fallback">🎬</div>
-                  )}
-                  <div className="showcase-badge upcoming">UPCOMING</div>
-                </div>
-                <div className="showcase-info">
-                  <div>
-                    <span className="showcase-genre">{movie.genre}</span>
-                    <h3>{movie.title}</h3>
-                    <p className="release-date-text">Releasing on: {movie.releaseDate}</p>
+                <Link to="/movies" state={{ selectedMovieId: movie.id }} style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="showcase-poster-wrapper">
+                    {movie.poster ? (
+                      <img src={movie.poster} alt={movie.title} className="showcase-poster-img" />
+                    ) : (
+                      <div className="showcase-poster-fallback">🎬</div>
+                    )}
+                    <div className="showcase-badge upcoming">UPCOMING</div>
                   </div>
+                  <div className="showcase-info" style={{ paddingBottom: 0 }}>
+                    <span className="showcase-genre">{movie.genre}</span>
+                    <h3 style={{ marginBottom: 0 }}>{movie.title}</h3>
+                    <p className="release-date-text" style={{ margin: "4px 0 0 0" }}>Releasing on: {movie.releaseDate}</p>
+                  </div>
+                </Link>
+                <div className="showcase-info" style={{ paddingTop: 0 }}>
                   <div className="showcase-footer">
                     <span className="movie-rating">★ {getAverageRating(movie)}</span>
                     <span className="upcoming-btn-placeholder">Coming Soon</span>

@@ -7,7 +7,6 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import MovieCatalog from "./pages/MovieCatalog";
 import Booking from "./pages/Booking";
-import VerifyEmail from "./pages/VerifyEmail";
 import ResetPassword from "./pages/ResetPassword";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -38,9 +37,7 @@ function App() {
     return (
       <>
         <Navbar user={user} onLogout={handleLogout} />
-        <main style={{ flexGrow: 1 }}>
-          {children}
-        </main>
+        <main style={{ flexGrow: 1 }}>{children}</main>
       </>
     );
   };
@@ -48,62 +45,67 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <>
               <Navbar user={user} onLogout={handleLogout} />
               <Landing user={user} />
             </>
-          } 
+          }
         />
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/dashboard" replace /> : <Login onLogin={handleLogin} isAdmin={false} />} 
+        <Route
+          path="/login"
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Login onLogin={handleLogin} isAdmin={false} />
+            )
+          }
         />
-        <Route 
-          path="/admin-login" 
-          element={user && user.role === "ADMIN" ? <Navigate to="/admin" replace /> : <Login onLogin={handleLogin} isAdmin={true} />} 
+        <Route
+          path="/admin-login"
+          element={
+            user && user.role === "ADMIN" ? (
+              <Navigate to="/admin" replace />
+            ) : (
+              <Login onLogin={handleLogin} isAdmin={true} />
+            )
+          }
         />
-        <Route 
-          path="/verify-email" 
-          element={<VerifyEmail />} 
-        />
-        <Route 
-          path="/reset-password" 
-          element={<ResetPassword />} 
-        />
-        <Route 
-          path="/dashboard" 
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/dashboard"
           element={
             <ProtectedLayout>
               <Dashboard user={user} />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/movies" 
+        <Route
+          path="/movies"
           element={
             <ProtectedLayout>
               <MovieCatalog user={user} />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/booking" 
+        <Route
+          path="/booking"
           element={
             <ProtectedLayout>
               <Booking user={user} />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/admin" 
+        <Route
+          path="/admin"
           element={
             <ProtectedLayout requireAdmin={true}>
               <AdminDashboard user={user} />
             </ProtectedLayout>
-          } 
+          }
         />
         {/* Fallback redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
